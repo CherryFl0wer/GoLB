@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type Balancer struct {
 	pool     *MinHeap
 	doneChan chan *Worker
@@ -8,16 +10,16 @@ type Balancer struct {
 /*
 	Initialize Pool of Worker
 */
-func InitBalancer(nbWorker, nbRequests int) *Balancer {
+func InitBalancer() *Balancer {
 
 	// Create new balancer
 	balancer := new(Balancer)
-	balancer.pool = InitHeap(nbWorker)               // init heap for the n workers
-	balancer.doneChan = make(chan *Worker, nbWorker) // Create workers channel
+	balancer.pool = InitHeap(nWorker)               // init heap for the n workers
+	balancer.doneChan = make(chan *Worker, nWorker) // Create workers channel
 
-	for i := 0; i < nbWorker; i++ {
+	for i := 0; i < nWorker; i++ {
 		worker := new(Worker)
-		worker.requests = make(chan Request, nbRequests)
+		worker.requests = make(chan Request, nRequester)
 		worker.priority = 0
 
 		balancer.pool.Insert(worker)
@@ -48,4 +50,5 @@ func (b *Balancer) dispatch(req Request) {
 
 func (b *Balancer) completed(work *Worker) {
 	b.pool.SetPriority(work.index, work.priority-1)
+	fmt.Println("completed request inside Worker n° : ", work.index, " priority is ", work.priority+1)
 }
