@@ -19,7 +19,7 @@ func main() {
 			fmt.Println("You're lost, go home")
 		})
 
-		go Requester(nil, requests)
+		go Requester(requests)
 	}
 
 	InitBalancer().Balancing(requests)
