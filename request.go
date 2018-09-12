@@ -26,7 +26,7 @@ func AddRequestToQueue(operation FunctionCallType) {
 
 // Requester  Request specific method
 // ----
-func Requester(operation http.HandlerFunc, requests chan<- Request) {
+func Requester(requests chan<- Request) {
 	resultChan := make(chan bool)
 	for {
 		time.Sleep(time.Duration(rand.Int63n(int64(time.Millisecond)))) // Simulate load, wait before next request
