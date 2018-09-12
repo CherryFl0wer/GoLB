@@ -1,23 +1,27 @@
 package main
 
 import (
+	"fmt"
 	"runtime"
 )
 
 const nWorker = 10
 const nRequester = 100
 
-const MaxNbThread = 4 //runtime.NumCPU()
+var MaxNbThread int = runtime.NumCPU()
 
 func main() {
 	runtime.GOMAXPROCS(MaxNbThread)
 
 	requests := make(chan Request)
 	for i := 0; i < nRequester; i++ {
-		go Requester(func() OperationResponseType {
-			return 1
-		}, requests)
+		AddRequestToQueue(func() {
+			fmt.Println("You're lost, go home")
+		})
+
+		go Requester(nil, requests)
 	}
 
 	InitBalancer().Balancing(requests)
+
 }

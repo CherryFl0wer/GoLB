@@ -10,7 +10,8 @@ type Worker struct {
 func (w *Worker) executor(done chan *Worker) {
 	for {
 		request := <-w.requests
-		request.response <- request.operation()
+		request.operation()
+		request.response <- true
 		done <- w
 	}
 }
